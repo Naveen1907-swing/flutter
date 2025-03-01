@@ -8,6 +8,7 @@ import 'pages/cart_page.dart';
 import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/home_page.dart';
+import 'pages/landing_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,13 +22,15 @@ void main() async {
 }
 
 final _router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/landing',
   redirect: (context, state) {
     final bool isLoggedIn = supabase.auth.currentUser != null;
-    final bool isAuthRoute = state.matchedLocation == '/' || state.matchedLocation == '/signup';
+    final bool isAuthRoute = state.matchedLocation == '/login' || 
+                           state.matchedLocation == '/signup' ||
+                           state.matchedLocation == '/landing';
 
     if (!isLoggedIn && !isAuthRoute) {
-      return '/';
+      return '/landing';
     }
 
     if (isLoggedIn && isAuthRoute) {
@@ -38,7 +41,11 @@ final _router = GoRouter(
   },
   routes: [
     GoRoute(
-      path: '/',
+      path: '/landing',
+      builder: (context, state) => const LandingPage(),
+    ),
+    GoRoute(
+      path: '/login',
       builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
